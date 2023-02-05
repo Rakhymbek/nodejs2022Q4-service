@@ -10,7 +10,6 @@ import {
   HttpCode,
   UseInterceptors,
   ClassSerializerInterceptor,
-  Header,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
@@ -36,12 +35,13 @@ export class UserController {
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto): User {
     return this.userService.create(createUserDto);
   }
 
   @Put(':id')
-  @Header('Accept', 'application/json')
+  @HttpCode(HttpStatus.OK)
   updatePassword(
     @Param('id') id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,

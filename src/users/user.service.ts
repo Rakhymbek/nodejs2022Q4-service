@@ -41,7 +41,7 @@ export class UserService {
     return newUser;
   }
 
-  remove(id: string): boolean {
+  remove(id: string) {
     if (!this.isUuid(id)) {
       throw new HttpException('Invalid userId', HttpStatus.BAD_REQUEST);
     }
@@ -52,15 +52,21 @@ export class UserService {
     }
 
     db.users.splice(index, 1);
-    return true;
   }
 
   updatePassword(id: string, updatePasswordDto: UpdatePasswordDto): User {
+    if (this.isObjectEmpty(updatePasswordDto)) {
+      throw new HttpException(
+        'Old password is incorrect',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     if (!this.isUuid(id)) {
       throw new HttpException('Invalid userId', HttpStatus.BAD_REQUEST);
     }
 
-    const user = db.users.find((user) => user.id === id);
+    const user = this.getById(id);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -84,5 +90,9 @@ export class UserService {
 
   isUuid(id: string): boolean {
     return validate(id);
+  }
+
+  isObjectEmpty(obj) {
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
   }
 }
