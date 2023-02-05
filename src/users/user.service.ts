@@ -56,10 +56,7 @@ export class UserService {
 
   updatePassword(id: string, updatePasswordDto: UpdatePasswordDto): User {
     if (this.isObjectEmpty(updatePasswordDto)) {
-      throw new HttpException(
-        'Old password is incorrect',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('Invalid body', HttpStatus.BAD_REQUEST);
     }
 
     if (!this.isUuid(id)) {
@@ -92,7 +89,7 @@ export class UserService {
     return validate(id);
   }
 
-  isObjectEmpty(obj) {
+  isObjectEmpty(obj: any) {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
   }
 }
