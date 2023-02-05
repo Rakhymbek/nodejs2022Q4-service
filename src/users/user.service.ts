@@ -60,7 +60,7 @@ export class UserService {
       throw new HttpException('Invalid userId', HttpStatus.BAD_REQUEST);
     }
 
-    const user = this.getById(id);
+    const user = db.users.find((user) => user.id === id);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -71,17 +71,15 @@ export class UserService {
         HttpStatus.FORBIDDEN,
       );
     }
-    const newUser: User = new User({
-      ...user,
-      password: updatePasswordDto.newPassword,
-      version: user.version + 1,
-      updatedAt: Date.now(),
-    });
-    db.users = db.users.map((user) =>
-      user.id === newUser.id ? { ...newUser } : user,
-    );
+    const index = db.users.findIndex((user) => user.id === id);
 
-    return newUser;
+    user.password = updatePasswordDto.newPassword;
+    user.version += 1;
+    user.updatedAt = Date.now();
+
+    db.users.splice(index, 1, user);
+
+    return user;
   }
 
   isUuid(id: string): boolean {

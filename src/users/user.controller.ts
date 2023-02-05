@@ -10,9 +10,11 @@ import {
   HttpCode,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Header,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
+import { User } from './user.interface';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -22,27 +24,28 @@ export class UserController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll() {
+  findAll(): User[] {
     return this.userService.getAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): User {
     const user = this.userService.getById(id);
     return user;
   }
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  create(@Body() createUserDto: CreateUserDto): User {
     return this.userService.create(createUserDto);
   }
 
   @Put(':id')
+  @Header('Accept', 'application/json')
   updatePassword(
     @Param('id') id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
-  ) {
+  ): User {
     return this.userService.updatePassword(id, updatePasswordDto);
   }
 
