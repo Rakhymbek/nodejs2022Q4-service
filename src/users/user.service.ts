@@ -3,20 +3,19 @@ import { User } from './user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { v4 as uuidv4, validate } from 'uuid';
+import { db } from 'src/db/db';
 
 @Injectable()
 export class UserService {
-  private readonly users: User[] = [];
-
   getAll(): User[] {
-    return this.users;
+    return db.users;
   }
 
   getById(id: string): User {
     if (!this.isUuid(id)) {
       throw new HttpException('Invalid userId', HttpStatus.BAD_REQUEST);
     }
-    const user = this.users.find((u) => u.id === id);
+    const user = db.users.find((u) => u.id === id);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -30,17 +29,16 @@ export class UserService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const newUser: User = {
+    const newUser: User = new User({
       id: uuidv4(),
       login: createUserDto.login,
       password: createUserDto.password,
       version: 1,
       createdAt: Date.now(),
       updatedAt: Date.now(),
-    };
-    this.users.push(newUser);
-    const { password, ...restUserData } = newUser;
-    return restUserData;
+    });
+    db.users.push(newUser);
+    return newUser;
   }
 
   remove(id: string): boolean {
@@ -48,12 +46,12 @@ export class UserService {
       throw new HttpException('Invalid userId', HttpStatus.BAD_REQUEST);
     }
 
-    const index = this.users.findIndex((user) => user.id === id);
+    const index = db.users.findIndex((user) => user.id === id);
     if (index === -1) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    this.users.splice(index, 1);
+    db.users.splice(index, 1);
     return true;
   }
 
@@ -73,11 +71,17 @@ export class UserService {
         HttpStatus.FORBIDDEN,
       );
     }
+    const newUser: User = new User({
+      ...user,
+      password: updatePasswordDto.newPassword,
+      version: user.version + 1,
+      updatedAt: Date.now(),
+    });
+    db.users = db.users.map((user) =>
+      user.id === newUser.id ? { ...newUser } : user,
+    );
 
-    user.password = updatePasswordDto.newPassword;
-    user.version += 1;
-    user.updatedAt = Date.now();
-    return user;
+    return newUser;
   }
 
   isUuid(id: string): boolean {
