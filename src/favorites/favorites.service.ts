@@ -1,3 +1,4 @@
+import { Album } from 'src/albums/album.interface';
 import { Track } from './../tracks/track.interface';
 import { Favorites } from './favorites.interface';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -37,6 +38,35 @@ export class FavoritesService {
     }
 
     db.favorites.tracks.splice(index, 1);
+  }
+
+  addAlbum(id: string): Album {
+    if (!this.isUuid(id)) {
+      throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
+    }
+    const album = db.albums.find((a) => a.id === id);
+    if (!album) {
+      throw new HttpException(
+        'Album does not exist',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    db.favorites.albums.push(album);
+    return album;
+  }
+
+  removeAlbum(id: string): void {
+    if (!this.isUuid(id)) {
+      throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
+    }
+
+    const index = db.favorites.albums.findIndex((a) => a.id === id);
+    if (index === -1) {
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+    }
+
+    db.favorites.albums.splice(index, 1);
   }
 
   isUuid(id: string): boolean {

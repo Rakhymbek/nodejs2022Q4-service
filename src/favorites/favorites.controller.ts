@@ -1,3 +1,4 @@
+import { Album } from 'src/albums/album.interface';
 import { Track } from './../tracks/track.interface';
 import { Favorites } from './favorites.interface';
 import { FavoritesService } from './favorites.service';
@@ -10,7 +11,6 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put,
 } from '@nestjs/common';
 
 @Controller('favs')
@@ -33,5 +33,17 @@ export class FavoritesController {
   @HttpCode(HttpStatus.NO_CONTENT)
   removeTrack(@Param('id') id: string): void {
     return this.favoritesService.removeTrack(id);
+  }
+
+  @Post('album/:id')
+  @HttpCode(HttpStatus.CREATED)
+  addAlbum(@Param('id') id: string): Album {
+    return this.favoritesService.addAlbum(id);
+  }
+
+  @Delete('album/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeAlbum(@Param('id') id: string): void {
+    return this.favoritesService.removeAlbum(id);
   }
 }
