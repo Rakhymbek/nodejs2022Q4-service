@@ -65,8 +65,78 @@ npm run lint
 npm run format
 ```
 
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+### Instructions
+1. 
+    * `Users` (`/user` route)
+        * `GET /user` - get all users
+        * `GET /user/:id` - get single user by id
+        * `POST /user` - create user (following body should be used)
+        ```json
+            {
+                "login": "Novak",
+                "password": "backhand"
+            }
+        ```
+        * `PUT /user/:id` - update user's password
+        ```json
+            {
+                "oldPassword": "backhand", // previous password
+                "newPassword": "forehand" // new password
+            }
+        ```
+        * `DELETE /user/:id` - delete user
+---
+2. 
+    * `Tracks` (`/track` route)
+        * `GET /track` - get all tracks
+        * `GET /track/:id` - get single track by id
+        * `POST /track` - create new track
+        ```json
+            {
+                "name": "track",
+                "duration": "3:50",
+                "artistId": "artistId", // optional
+                "albumId": "albumId" // optional
+            }
+        ```
+        * `PUT /track/:id` - update track info. You can use the same `body` as for POST
+        * `DELETE /track/:id` - delete track
+---
+3.  
+    * `Artists` (`/artist` route)
+        * `GET /artist` - get all artists
+        * `GET /artist/:id` - get single artist by id
+        * `POST /artist` - create new artist
+            ```json
+                {
+                    "name": "Roger",
+                    "grammy": false,
+                }
+            ```
+        * `PUT /artist/:id` - update artist info. You can use the same `body` as for POST
+        * `DELETE /artist/:id` - delete album
+---
+4.  
+    * `Albums` (`/album` route)
+        * `GET /album` - get all albums
+        * `GET /album/:id` - get single album by id
+        * `POST /album` - create new album
+        ```json
+            {
+                "name": "the best",
+                "year": "2023",
+                "artistId": "artistId", // optional
+            }
+        ```
+        * `PUT /album/:id` - update album info. You can use the same `body` as for POST
+        * `DELETE /album/:id` - delete album
+---
+5.  
+    * `Favorites`
+        * `GET /favs` - get all favorites. For below routes you need specific `id` of the entity.
+        * `POST /favs/track/:id` - add track to the favorites
+        * `DELETE /favs/track/:id` - delete track from favorites
+        * `POST /favs/album/:id` - add album to the favorites
+        * `DELETE /favs/album/:id` - delete album from favorites
+        * `POST /favs/artist/:id` - add artist to the favorites
+        * `DELETE /favs/artist/:id` - delete artist from favorites

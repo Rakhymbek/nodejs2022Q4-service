@@ -1,10 +1,28 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersModule } from './users/users.module';
+import { ArtistsModule } from './artists/artists.module';
+import { TracksModule } from './tracks/tracks.module';
+import { AlbumsModule } from './albums/albums.module';
+import { FavoritesModule } from './favorites/favorites.module';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
-  imports: [],
+  imports: [
+    UsersModule,
+    ArtistsModule,
+    TracksModule,
+    AlbumsModule,
+    FavoritesModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule {}
