@@ -1,3 +1,4 @@
+import { Favorites } from './../favorites/favorites.interface';
 import { dbType } from './db.interface';
 
 export const db: dbType = {
@@ -5,4 +6,9 @@ export const db: dbType = {
   albums: [],
   artists: [],
   tracks: [],
+  favorites: {
+    albums: [],
+    artists: [],
+    tracks: [],
+  },
 };

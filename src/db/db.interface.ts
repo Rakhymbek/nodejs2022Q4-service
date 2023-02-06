@@ -1,3 +1,4 @@
+import { Favorites } from './../favorites/favorites.interface';
 import { Album } from 'src/albums/album.interface';
 import { Artist } from 'src/artists/artist.interface';
 import { Track } from 'src/tracks/track.interface';
@@ -8,4 +9,5 @@ export interface dbType {
   tracks: Track[];
   albums: Album[];
   artists: Artist[];
+  favorites: Favorites;
 }
