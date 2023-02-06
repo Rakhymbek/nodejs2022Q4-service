@@ -57,6 +57,10 @@ export class TrackService {
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
 
+    db.favorites.tracks = db.favorites.tracks.filter(
+      (track) => track.id !== id,
+    );
+
     db.tracks.splice(index, 1);
   }
 

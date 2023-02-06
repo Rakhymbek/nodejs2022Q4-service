@@ -1,3 +1,4 @@
+import { Artist } from 'src/artists/artist.interface';
 import { Album } from 'src/albums/album.interface';
 import { Track } from './../tracks/track.interface';
 import { Favorites } from './favorites.interface';
@@ -45,5 +46,17 @@ export class FavoritesController {
   @HttpCode(HttpStatus.NO_CONTENT)
   removeAlbum(@Param('id') id: string): void {
     return this.favoritesService.removeAlbum(id);
+  }
+
+  @Post('artist/:id')
+  @HttpCode(HttpStatus.CREATED)
+  addArtist(@Param('id') id: string): Artist {
+    return this.favoritesService.addArtist(id);
+  }
+
+  @Delete('artist/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeArtist(@Param('id') id: string): void {
+    return this.favoritesService.removeArtist(id);
   }
 }

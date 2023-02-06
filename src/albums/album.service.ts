@@ -61,6 +61,10 @@ export class AlbumService {
       track.albumId = track.albumId === id ? null : track.albumId;
     });
 
+    db.favorites.albums = db.favorites.albums.filter(
+      (album) => album.id !== id,
+    );
+
     db.albums.splice(index, 1);
   }
 

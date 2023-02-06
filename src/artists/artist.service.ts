@@ -61,6 +61,10 @@ export class ArtistService {
       track.artistId = track.artistId === id ? null : track.artistId;
     });
 
+    db.favorites.artists = db.favorites.artists.filter(
+      (artist) => artist.id !== id,
+    );
+
     db.artists.splice(index, 1);
   }
 
