@@ -1,60 +1,67 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { User } from './user.interface';
+import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { v4 as uuidv4, validate } from 'uuid';
 import { db } from 'src/db/db';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  getAll(): User[] {
-    return db.users;
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
+
+  async getAll(): Promise<User[]> {
+    return await this.userRepository.find();
   }
 
-  getById(id: string): User {
+  async getById(id: string): Promise<User> {
     if (!this.isUuid(id)) {
       throw new HttpException('Invalid userId', HttpStatus.BAD_REQUEST);
     }
-    const user = db.users.find((u) => u.id === id);
+    const user = await this.userRepository.findOneBy({ id });
+    console.log('USER IS HERE?', user);
+
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
     return user;
   }
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     if (!createUserDto.login || !createUserDto.password) {
       throw new HttpException(
         'Login and password are required fields',
         HttpStatus.BAD_REQUEST,
       );
     }
-    const newUser: User = new User({
+    const newUser = await this.userRepository.create({
       id: uuidv4(),
-      login: createUserDto.login,
-      password: createUserDto.password,
-      version: 1,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+      ...createUserDto,
     });
-    db.users.push(newUser);
-    return newUser;
+
+    return await this.userRepository.save(newUser);
   }
 
-  remove(id: string) {
+  async remove(id: string) {
     if (!this.isUuid(id)) {
       throw new HttpException('Invalid userId', HttpStatus.BAD_REQUEST);
     }
 
-    const index = db.users.findIndex((user) => user.id === id);
-    if (index === -1) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    db.users.splice(index, 1);
+    await this.userRepository.delete({ id });
   }
 
-  updatePassword(id: string, updatePasswordDto: UpdatePasswordDto): User {
+  async updatePassword(
+    id: string,
+    updatePasswordDto: UpdatePasswordDto,
+  ): Promise<User> {
     if (this.isObjectEmpty(updatePasswordDto)) {
       throw new HttpException('Invalid body', HttpStatus.BAD_REQUEST);
     }
@@ -63,7 +70,7 @@ export class UserService {
       throw new HttpException('Invalid userId', HttpStatus.BAD_REQUEST);
     }
 
-    const user = this.getById(id);
+    const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -74,15 +81,14 @@ export class UserService {
         HttpStatus.FORBIDDEN,
       );
     }
-    const index = db.users.findIndex((user) => user.id === id);
 
-    user.password = updatePasswordDto.newPassword;
-    user.version += 1;
-    user.updatedAt = Date.now();
+    await this.userRepository.update(id, {
+      password: updatePasswordDto.newPassword,
+      version: user.version + 1,
+      updatedAt: Math.floor(Date.now() / 1000),
+    });
 
-    db.users.splice(index, 1, user);
-
-    return user;
+    return await this.userRepository.findOneBy({ id });
   }
 
   isUuid(id: string): boolean {
