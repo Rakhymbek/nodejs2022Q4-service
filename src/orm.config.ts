@@ -3,7 +3,7 @@ import { User } from './users/user.entity';
 import { DataSourceOptions } from 'typeorm';
 import { Artist } from './artists/artist.entity';
 import { Album } from './albums/album.interface';
-import { Track } from './tracks/track.interface';
+import { Track } from './tracks/track.entity';
 
 config();
 

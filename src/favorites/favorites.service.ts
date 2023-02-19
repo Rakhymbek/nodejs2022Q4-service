@@ -1,6 +1,6 @@
 import { Artist } from 'src/artists/artist.entity';
 import { Album } from 'src/albums/album.interface';
-import { Track } from './../tracks/track.interface';
+import { Track } from '../tracks/track.entity';
 import { Favorites } from './favorites.interface';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { validate } from 'uuid';
