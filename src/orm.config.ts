@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { User } from './users/user.entity';
 import { DataSourceOptions } from 'typeorm';
 import { Artist } from './artists/artist.entity';
-import { Album } from './albums/album.interface';
+import { Album } from './albums/album.entity';
 import { Track } from './tracks/track.entity';
 
 config();

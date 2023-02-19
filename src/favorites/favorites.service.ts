@@ -1,5 +1,5 @@
 import { Artist } from 'src/artists/artist.entity';
-import { Album } from 'src/albums/album.interface';
+import { Album } from 'src/albums/album.entity';
 import { Track } from '../tracks/track.entity';
 import { Favorites } from './favorites.interface';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';

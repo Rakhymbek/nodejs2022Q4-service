@@ -1,5 +1,12 @@
 import { IsUUID, IsOptional } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Album } from 'src/albums/album.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Track {
@@ -20,4 +27,10 @@ export class Track {
 
   @Column({ nullable: false })
   duration: number; // integer number
+
+  @ManyToOne(() => Album, (album: Album) => album.tracks, {
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'albumId' })
+  album: Album[];
 }
