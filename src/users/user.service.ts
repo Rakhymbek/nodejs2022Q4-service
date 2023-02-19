@@ -22,7 +22,6 @@ export class UserService {
       throw new HttpException('Invalid userId', HttpStatus.BAD_REQUEST);
     }
     const user = await this.userRepository.findOneBy({ id });
-    console.log('USER IS HERE?', user);
 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
