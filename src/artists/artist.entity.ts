@@ -1,5 +1,6 @@
 import { IsUUID, IsBoolean, IsNotEmpty } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Track } from 'src/tracks/track.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Artist {
@@ -14,4 +15,7 @@ export class Artist {
   @IsNotEmpty()
   @Column()
   grammy: boolean;
+
+  @OneToMany(() => Track, (track: Track) => track.artist)
+  tracks: Track[];
 }

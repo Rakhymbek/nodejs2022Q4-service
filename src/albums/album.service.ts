@@ -63,14 +63,6 @@ export class AlbumService {
       throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     }
 
-    db.tracks.forEach(async (track) => {
-      track.albumId = track.albumId === id ? null : track.albumId;
-    });
-
-    db.favorites.albums = db.favorites.albums.filter(
-      (album) => album.id !== id,
-    );
-
     await this.albumRepository.delete({ id });
   }
 

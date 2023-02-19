@@ -1,5 +1,6 @@
 import { IsUUID, IsOptional } from 'class-validator';
 import { Album } from 'src/albums/album.entity';
+import { Artist } from 'src/artists/artist.entity';
 import {
   Column,
   Entity,
@@ -33,4 +34,10 @@ export class Track {
   })
   @JoinColumn({ name: 'albumId' })
   album: Album[];
+
+  @ManyToOne(() => Artist, (artist: Artist) => artist.tracks, {
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'artistId' })
+  artist: Artist;
 }

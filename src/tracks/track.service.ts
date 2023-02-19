@@ -62,11 +62,8 @@ export class TrackService {
     if (!track) {
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
-    await this.trackRepository.delete({ id });
 
-    db.favorites.tracks = db.favorites.tracks.filter(
-      (track) => track.id !== id,
-    );
+    await this.trackRepository.delete({ id });
   }
 
   isUuid(id: string): boolean {

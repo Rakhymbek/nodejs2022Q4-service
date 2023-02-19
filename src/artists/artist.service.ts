@@ -63,14 +63,6 @@ export class ArtistService {
     }
 
     await this.artistRepository.delete({ id });
-
-    db.tracks.forEach((track) => {
-      track.artistId = track.artistId === id ? null : track.artistId;
-    });
-
-    db.favorites.artists = db.favorites.artists.filter(
-      (artist) => artist.id !== id,
-    );
   }
 
   isUuid(id: string) {
