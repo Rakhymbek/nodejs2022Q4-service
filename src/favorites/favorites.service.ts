@@ -35,7 +35,7 @@ export class FavoritesService {
   }
 
   async addTrack(id: string): Promise<Track> {
-    if (!this.isUuid(id)) {
+    if (!validate(id)) {
       throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
     }
 
@@ -60,7 +60,7 @@ export class FavoritesService {
   }
 
   async removeTrack(id: string): Promise<void> {
-    if (!this.isUuid(id)) {
+    if (!validate(id)) {
       throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
     }
 
@@ -77,7 +77,7 @@ export class FavoritesService {
   }
 
   async addAlbum(id: string): Promise<Album> {
-    if (!this.isUuid(id)) {
+    if (!validate(id)) {
       throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
     }
 
@@ -102,7 +102,7 @@ export class FavoritesService {
   }
 
   async removeAlbum(id: string): Promise<void> {
-    if (!this.isUuid(id)) {
+    if (!validate(id)) {
       throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
     }
 
@@ -119,7 +119,7 @@ export class FavoritesService {
   }
 
   async addArtist(id: string): Promise<Artist> {
-    if (!this.isUuid(id)) {
+    if (!validate(id)) {
       throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
     }
 
@@ -144,7 +144,7 @@ export class FavoritesService {
   }
 
   async removeArtist(id: string): Promise<void> {
-    if (!this.isUuid(id)) {
+    if (!validate(id)) {
       throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
     }
 
@@ -157,9 +157,5 @@ export class FavoritesService {
     favorites.artists.splice(index, 1);
 
     await this.favoritesRepository.save(favorites);
-  }
-
-  isUuid(id: string): boolean {
-    return validate(id);
   }
 }

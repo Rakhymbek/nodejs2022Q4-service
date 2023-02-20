@@ -15,8 +15,9 @@ export default {
   username: process.env.POSTGRES_USER as string,
   password: process.env.POSTGRES_PASSWORD as string,
   database: process.env.POSTGRES_DB as string,
-  entities: [User, Artist, Album, Track, Favorites],
-  migrations: ['migrations/**/*{.ts,.js}'],
+  entities: [User, Artist, Track, Album, Favorites],
+  migrations: ['dist/migrations/*{.ts,.js}'],
   logging: true,
-  synchronize: true,
+  synchronize: false,
+  migrationsRun: true,
 } as DataSourceOptions;
