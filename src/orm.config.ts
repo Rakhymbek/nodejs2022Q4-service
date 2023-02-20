@@ -18,6 +18,6 @@ export default {
   entities: [User, Artist, Track, Album, Favorites],
   migrations: ['dist/migrations/*{.ts,.js}'],
   logging: true,
-  synchronize: false,
+  synchronize: true,
   migrationsRun: true,
 } as DataSourceOptions;
