@@ -1,71 +1,67 @@
 import { ArtistDto } from './dto/artist.dto';
 import { v4 as uuidv4, validate } from 'uuid';
-import { Artist } from 'src/artists/artist.interface';
-import { db } from './../db/db';
+import { Artist } from 'src/artists/artist.entity';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ArtistService {
-  getAll(): Artist[] {
-    return db.artists;
+  constructor(
+    @InjectRepository(Artist)
+    private readonly artistRepository: Repository<Artist>,
+  ) {}
+  async getAll(): Promise<Artist[]> {
+    return await this.artistRepository.find();
   }
 
-  getById(id: string): Artist {
+  async getById(id: string): Promise<Artist> {
     if (!this.isUuid(id)) {
       throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
     }
-    const artist = db.artists.find((a) => a.id === id);
+    const artist = await this.artistRepository.findOneBy({ id });
     if (!artist) {
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
     }
     return artist;
   }
 
-  create(createArtistDto: ArtistDto): Artist {
-    const artist = new Artist({
+  async create(createArtistDto: ArtistDto): Promise<Artist> {
+    const artist = this.artistRepository.create({
       id: uuidv4(),
       ...createArtistDto,
     });
 
-    db.artists.push(artist);
-
-    return artist;
+    return await this.artistRepository.save(artist);
   }
 
-  updateArtist(id: string, updateArtistDto: ArtistDto): Artist {
-    const artist = this.getById(id);
-    if (!artist) {
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
-    }
-
-    const index = db.artists.findIndex((t) => t.id === id);
-
-    const updateArtist = new Artist({ id, ...updateArtistDto });
-
-    db.artists.splice(index, 1, updateArtist);
-
-    return updateArtist;
-  }
-
-  remove(id: string): void {
+  async updateArtist(id: string, updateArtistDto: ArtistDto): Promise<Artist> {
     if (!this.isUuid(id)) {
       throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
     }
 
-    const index = db.artists.findIndex((a) => a.id === id);
-    if (index === -1) {
+    const artist = await this.artistRepository.findOneBy({ id });
+
+    if (!artist) {
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
     }
 
-    db.tracks.forEach((track) => {
-      track.artistId = track.artistId === id ? null : track.artistId;
-    });
+    await this.artistRepository.update(id, { ...updateArtistDto });
 
-    db.favorites.artists = db.favorites.artists.filter(
-      (artist) => artist.id !== id,
-    );
+    return await this.artistRepository.findOneBy({ id });
+  }
 
-    db.artists.splice(index, 1);
+  async remove(id: string): Promise<void> {
+    if (!this.isUuid(id)) {
+      throw new HttpException('Invalid id', HttpStatus.BAD_REQUEST);
+    }
+
+    const artist = await this.artistRepository.findOneBy({ id });
+    if (!artist) {
+      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+    }
+
+    await this.artistRepository.delete({ id });
   }
 
   isUuid(id: string) {

@@ -1,4 +1,4 @@
-import { Artist } from 'src/artists/artist.interface';
+import { Artist } from 'src/artists/artist.entity';
 import { ArtistDto } from './dto/artist.dto';
 import { ArtistService } from './artist.service';
 import {
@@ -19,34 +19,34 @@ export class ArtistController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll(): Artist[] {
-    return this.artistService.getAll();
+  async findAll(): Promise<Artist[]> {
+    return await this.artistService.getAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('id') id: string): Artist {
-    return this.artistService.getById(id);
+  async findOne(@Param('id') id: string): Promise<Artist> {
+    return await this.artistService.getById(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createArtistDto: ArtistDto): Artist {
-    return this.artistService.create(createArtistDto);
+  async create(@Body() createArtistDto: ArtistDto): Promise<Artist> {
+    return await this.artistService.create(createArtistDto);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  updateArtist(
+  async updateArtist(
     @Param('id') id: string,
     @Body() updateArtistDto: ArtistDto,
-  ): Artist {
-    return this.artistService.updateArtist(id, updateArtistDto);
+  ): Promise<Artist> {
+    return await this.artistService.updateArtist(id, updateArtistDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteArtist(@Param('id') id: string) {
-    return this.artistService.remove(id);
+  async deleteArtist(@Param('id') id: string) {
+    return await this.artistService.remove(id);
   }
 }
