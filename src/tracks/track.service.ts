@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { db } from 'src/db/db';
 import { Track } from './track.entity';
 import { v4 as uuidv4, validate } from 'uuid';
 import { TrackDto } from './dto/track.dto';

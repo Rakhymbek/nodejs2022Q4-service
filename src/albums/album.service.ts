@@ -2,7 +2,6 @@ import { AlbumDto } from './dto/album.dto';
 import { Album } from 'src/albums/album.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { v4 as uuidv4, validate } from 'uuid';
-import { db } from 'src/db/db';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 

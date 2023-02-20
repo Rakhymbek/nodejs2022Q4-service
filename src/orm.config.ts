@@ -4,6 +4,7 @@ import { DataSourceOptions } from 'typeorm';
 import { Artist } from './artists/artist.entity';
 import { Album } from './albums/album.entity';
 import { Track } from './tracks/track.entity';
+import { Favorites } from './favorites/favorites.entity';
 
 config();
 
@@ -14,7 +15,7 @@ export default {
   username: process.env.POSTGRES_USER as string,
   password: process.env.POSTGRES_PASSWORD as string,
   database: process.env.POSTGRES_DB as string,
-  entities: [User, Artist, Album, Track],
+  entities: [User, Artist, Album, Track, Favorites],
   migrations: ['migrations/**/*{.ts,.js}'],
   logging: true,
   synchronize: true,

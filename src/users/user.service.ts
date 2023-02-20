@@ -3,7 +3,6 @@ import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-user.dto';
 import { v4 as uuidv4, validate } from 'uuid';
-import { db } from 'src/db/db';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 

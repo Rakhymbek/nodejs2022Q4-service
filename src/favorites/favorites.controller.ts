@@ -1,10 +1,9 @@
 import { Artist } from 'src/artists/artist.entity';
 import { Album } from 'src/albums/album.entity';
 import { Track } from '../tracks/track.entity';
-import { Favorites } from './favorites.interface';
+import { Favorites } from './favorites.entity';
 import { FavoritesService } from './favorites.service';
 import {
-  Body,
   Controller,
   Delete,
   Get,
@@ -20,43 +19,43 @@ export class FavoritesController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll(): Favorites {
-    return this.favoritesService.getAll();
+  async findAll(): Promise<Favorites> {
+    return await this.favoritesService.getAll();
   }
 
   @Post('track/:id')
   @HttpCode(HttpStatus.CREATED)
-  addTrack(@Param('id') id: string): Track {
-    return this.favoritesService.addTrack(id);
+  async addTrack(@Param('id') id: string): Promise<Track> {
+    return await this.favoritesService.addTrack(id);
   }
 
   @Delete('track/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeTrack(@Param('id') id: string): void {
-    return this.favoritesService.removeTrack(id);
+  async removeTrack(@Param('id') id: string): Promise<void> {
+    return await this.favoritesService.removeTrack(id);
   }
 
   @Post('album/:id')
   @HttpCode(HttpStatus.CREATED)
-  addAlbum(@Param('id') id: string): Album {
-    return this.favoritesService.addAlbum(id);
+  async addAlbum(@Param('id') id: string): Promise<Album> {
+    return await this.favoritesService.addAlbum(id);
   }
 
   @Delete('album/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeAlbum(@Param('id') id: string): void {
-    return this.favoritesService.removeAlbum(id);
+  async removeAlbum(@Param('id') id: string): Promise<void> {
+    return await this.favoritesService.removeAlbum(id);
   }
 
   @Post('artist/:id')
   @HttpCode(HttpStatus.CREATED)
-  addArtist(@Param('id') id: string): Artist {
-    return this.favoritesService.addArtist(id);
+  async addArtist(@Param('id') id: string): Promise<Artist> {
+    return await this.favoritesService.addArtist(id);
   }
 
   @Delete('artist/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  removeArtist(@Param('id') id: string): void {
-    return this.favoritesService.removeArtist(id);
+  async removeArtist(@Param('id') id: string): Promise<void> {
+    return await this.favoritesService.removeArtist(id);
   }
 }

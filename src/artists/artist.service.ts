@@ -1,7 +1,6 @@
 import { ArtistDto } from './dto/artist.dto';
 import { v4 as uuidv4, validate } from 'uuid';
 import { Artist } from 'src/artists/artist.entity';
-import { db } from './../db/db';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
