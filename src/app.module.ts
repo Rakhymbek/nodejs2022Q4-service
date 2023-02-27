@@ -6,12 +6,13 @@ import { ArtistsModule } from './artists/artists.module';
 import { TracksModule } from './tracks/tracks.module';
 import { AlbumsModule } from './albums/albums.module';
 import { FavoritesModule } from './favorites/favorites.module';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { LoggerModule } from './logger/logger.module';
 import ormConfig from './orm.config';
 import { LoggingMiddleware } from './logger/logging.middleware';
+import { CustomExceptionFilter } from './logger/custom-exception.filter';
 
 @Module({
   imports: [
@@ -30,6 +31,11 @@ import { LoggingMiddleware } from './logger/logging.middleware';
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
+    },
+
+    {
+      provide: APP_FILTER,
+      useClass: CustomExceptionFilter,
     },
   ],
 })
