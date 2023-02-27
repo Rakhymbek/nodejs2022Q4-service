@@ -1,4 +1,4 @@
-import { Controller, HttpStatus } from '@nestjs/common';
+import { Controller, HttpStatus, UseGuards } from '@nestjs/common';
 import {
   Body,
   Delete,
@@ -11,7 +11,9 @@ import {
 import { TrackDto } from './dto/track.dto';
 import { Track } from './track.entity';
 import { TrackService } from './track.service';
+import { TokenGuard } from '../auth/guards/token.guard';
 
+@UseGuards(TokenGuard)
 @Controller('track')
 export class TrackController {
   constructor(private trackService: TrackService) {}

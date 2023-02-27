@@ -23,8 +23,8 @@ export class AuthService {
       Number(process.env.CRYPT_SALT),
     );
     return this.userService.create({
-      password: userHashPassword,
       ...userDto,
+      password: userHashPassword,
     });
   }
 

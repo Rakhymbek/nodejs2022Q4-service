@@ -5,6 +5,8 @@ import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/user.entity';
+import { TokenStrategy } from './token.strategy';
+import 'dotenv/config';
 
 @Module({
   imports: [
@@ -12,10 +14,10 @@ import { User } from '../users/user.entity';
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
-      // signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: process.env.TOKEN_EXPIRE_TIME },
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, TokenStrategy],
 })
 export class AuthModule {}
