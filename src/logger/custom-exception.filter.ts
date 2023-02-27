@@ -25,6 +25,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
       response.status(status).json({
         statusCode: status,
         message,
+        timestamp: new Date().toISOString(),
       });
     } else {
       this.logger.error(
