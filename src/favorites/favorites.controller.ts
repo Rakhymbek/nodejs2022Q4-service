@@ -11,8 +11,11 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { TokenGuard } from '../auth/guards/token.guard';
 
+@UseGuards(TokenGuard)
 @Controller('favs')
 export class FavoritesController {
   constructor(private favoritesService: FavoritesService) {}

@@ -11,8 +11,11 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { TokenGuard } from '../auth/guards/token.guard';
 
+@UseGuards(TokenGuard)
 @Controller('album')
 export class AlbumController {
   constructor(private albumService: AlbumService) {}
